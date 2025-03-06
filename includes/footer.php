@@ -7,5 +7,7 @@
     <script src="../assets/validateOtpScript.js"></script>
     <script src="../assets/credentialScript.js"></script>
     <script src="../assets/registerScript.js"></script>
+    <script src="../assets/updateScript.js"></script>
+    <script src="../assets/deleteScript.js"></script>
 </body>
 </html>

@@ -9,8 +9,12 @@ include("../includes/header.php");
         <div class="col-25">
             <label for="email">Enter your E-Mail </label>
         </div>
-        <div col-75>
+        <div class="col-75">
             <input type="email" name="email" id="email" placeholder="something@domain.com">
+        </div>
+        <br>
+        <div class="col-75">
+            <span id="message"></span>
         </div>
         <br>
         <div>

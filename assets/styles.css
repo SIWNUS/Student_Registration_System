@@ -50,9 +50,20 @@ main {
     border-radius: 10px;
 }
 
-main h2 {
+main img {
+    height: 260px;
+    width: 200px;
+    padding-top: 20px;
+}
+
+main h2{
     padding-bottom: 30px;
     text-align: center;
+    color: blue;
+}
+
+h3 {
+    text-align: justify;
     color: blue;
 }
 
@@ -91,6 +102,10 @@ main::after {
     margin-top: 6px;
 }
 
+.col-75 p {
+    margin-top: 12px;
+}
+
 input[type="text"], input[type="email"], 
 input[type="password"], input[type="number"], 
 input[type="date"], select {
@@ -112,6 +127,13 @@ span {
     font-style: italic;
     font-weight: bold;
     color: green;
+}
+
+#message {
+    font-size: small;
+    font-style: italic; 
+    font-weight: lighter;
+    color: red;
 }
 
 label {
@@ -138,6 +160,55 @@ div br {
     max-height: 10px;
 }
 
+.container {
+    width: 90%;
+    margin: 20px auto;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    overflow-x: auto; /* Allows scrolling on small screens */
+}
+
+/* Table Styles */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+}
+
+th {
+    background-color: #333;
+    color: white;
+}
+
+.delete {
+    background-color: #333;
+    color: white;
+    float: right;
+    padding: 12px 26px;
+    margin-top: 12px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+}
+
+.delete:hover {
+    background-color: red;
+}
+
+.profile-pic {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
 footer {
     background-color: #333;
     color: #f2f2f2;
@@ -158,5 +229,25 @@ footer {
         float: none;
         width: 100%;
         margin-top: 12px;
+    }
+    .container {
+        padding: 10px;
+    }
+
+    table {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+        white-space: nowrap; /* Prevents table text from wrapping */
+    }
+
+    th, td {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    .profile-pic {
+        width: 40px;
+        height: 40px;
     }
 }

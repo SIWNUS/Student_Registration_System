@@ -13,7 +13,7 @@ document.getElementById('validateOtp').addEventListener('submit', function(event
             alert(data.success);
             window.location.assign('../pages/credentials.php');
         } else {
-            alert(data.error);
+            document.getElementById('message').innerText = data.error;
         }
     })
     .catch(error => {

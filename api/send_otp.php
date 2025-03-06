@@ -4,6 +4,8 @@ session_start();
 
 header('Content-Type: application/json');
 
+include('../config/db.php');
+
 function generate_otp(){
     $otp = '';
     for ($i = 0; $i < 6; $i++) {
@@ -30,6 +32,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         echo json_encode( $response );
         exit;
     } else {
+
+        $checkEmailQuery = "SELECT id FROM students WHERE email = ?";
+        $stmt = $conn->prepare($checkEmailQuery);
+        if ($stmt) {
+            $stmt->bind_param("s", $email);
+            $stmt->execute();
+            $stmt->store_result(); // Needed to get num_rows
+            if ($stmt->num_rows > 0) {
+                $response["exist_error"] = "This email is already registered.";
+                echo json_encode($response);
+                $stmt->close();
+                exit();
+            }
+            $stmt->close();
+        } else {
+            $response["error"] = "Database error: " . $conn->error;
+            echo json_encode($response);
+            exit();
+        }
+
         $otp = generate_otp();
         
         $subject = "OTP for verification -reg.";

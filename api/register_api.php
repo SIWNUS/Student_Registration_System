@@ -67,23 +67,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_SESSION['email']) && isset($
             echo json_encode($response);
             exit();
         }
-    }
-
-    $checkEmailQuery = "SELECT id FROM students WHERE email = ?";
-    $stmt = $conn->prepare($checkEmailQuery);
-    if ($stmt) {
-        $stmt->bind_param("s", $email);
-        $stmt->execute();
-        $stmt->store_result(); // Needed to get num_rows
-        if ($stmt->num_rows > 0) {
-            $response["error"] = "This email is already registered.";
-            echo json_encode($response);
-            $stmt->close();
-            exit();
-        }
-        $stmt->close();
     } else {
-        $response["error"] = "Database error: " . $conn->error;
+        $response["error"] = "You have to set your profile pic";
         echo json_encode($response);
         exit();
     }
@@ -97,6 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_SESSION['email']) && isset($
 
         if ($stmt->execute()) {
             $response["success"] = "Registered successfully";
+            session_unset();
         } else {
             $response["error"] = "Database error: " . $stmt->error;
         }

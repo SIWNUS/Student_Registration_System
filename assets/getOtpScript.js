@@ -1,5 +1,3 @@
-console.log("script.js loaded");
-
 document.getElementById('getOtp').addEventListener('submit', function(event){
     event.preventDefault();
 
@@ -14,8 +12,11 @@ document.getElementById('getOtp').addEventListener('submit', function(event){
         if (data.success) {
             alert(data.success);
             window.location.assign('../pages/verify_otp.php');
+        } else if (data.exist_error) {
+            alert(data.exist_error);
+            window.location.assign('../pages/login.php')
         } else {
-            alert(data.error);
+            document.getElementById('message').innerText = data.error;
         }
     })
     .catch(error => {

@@ -13,7 +13,7 @@ document.getElementById('detailsForm').addEventListener('submit', function(event
             alert(data.success);
             window.location.assign('../pages/login.php');
         } else {
-            alert(data.error);
+            document.getElementById('message').innerText = data.error;
         }
     })
     .catch(error => {

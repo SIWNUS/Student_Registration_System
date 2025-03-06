@@ -1,5 +1,4 @@
 <?php 
-ob_start();
 session_start();
 include("../includes/header.php") 
 ?>
@@ -24,7 +23,8 @@ include("../includes/header.php")
     
             if ($row = $result->fetch_assoc()) {
                 if (password_verify($password, $row["password"])) {
-                    $_SESSION['user_id'] = $row['id'];
+                    $_SESSION['logged_in'] = true;
+                    $_SESSION['email'] = $row['email'];
                     header("Location: dashboard.php");
                     exit();
                 } else {

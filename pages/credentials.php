@@ -20,6 +20,10 @@ include("../includes/header.php");
             <input type="password" name="re_password" id="re_password" placeholder="Enter yoyr password here...">
         </div>
         <br>
+        <div class="col-75">
+            <span id="message"></span>
+        </div>
+        <br>
         <div>
             <input type="submit" value="Submit">
         </div>

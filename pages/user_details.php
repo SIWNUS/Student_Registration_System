@@ -40,6 +40,10 @@ include("../includes/header.php");
             <span>(only 'jpg', 'jpeg', 'png' formats are accepted. max filesize = 5mb)</span>
         </div>
         <br><br>
+        <div class="col-75">
+            <span id="message"></span>
+        </div>
+        <br>
         <div>
             <input type="submit" value="Register">
         </div>
