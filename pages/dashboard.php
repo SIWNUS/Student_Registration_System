@@ -1,10 +1,11 @@
 <?php 
-session_start();
+include("../includes/header.php");
+
 if (!isset($_SESSION["logged_in"])) {
     echo "<script>alert('You are not logged in! Redirecting to home page!');</script>";
     echo "<script>window.location.assign('../index.php');</script>";
 }
-include("../includes/header.php");
+
 include("../config/db.php");
 ?>
 
