@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,7 +10,6 @@
 <body>
     <header>
         <nav>
-            <?php session_start(); ?>
             <a href="../index.php" id="home">Home</a>
             <?php if (isset($_SESSION['logged_in'])): ?>
                 <a href="../logout.php" id="func">Logout</a>
