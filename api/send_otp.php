@@ -1,8 +1,6 @@
 <?php
 
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
+ob_start(); // Start output buffering
 session_start();
 
 header('Content-Type: application/json');
@@ -17,29 +15,28 @@ require '../vendor/autoload.php';
 function generate_otp(){
     $otp = '';
     for ($i = 0; $i < 6; $i++) {
-        $num = random_int(0,9);
-        $otp .= (string)$num;
+        $otp .= random_int(0, 9);
     }
     return $otp;
 }
 
 $response = [];
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
 
-    if (empty($email)){
+    if (empty($email)) {
         $response['error'] = 'Fill in all the details';
         echo json_encode($response);
         exit();
     }
 
-    // check if email is valid
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $response["error"] = 'Invalid email format';
         echo json_encode( $response );
         exit;
     } else {
+
         $checkEmailQuery = "SELECT id FROM students WHERE email = ?";
         $stmt = $conn->prepare($checkEmailQuery);
         if ($stmt) {
@@ -61,39 +58,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         $otp = generate_otp();
         
-        $mail = new PHPMailer(true);
+        $subject = "OTP for verification -reg.";
 
-        try {
-            $mail->SMTPDebug = 0;
-            $mail->isSMTP();
-            $mail->Host = 'smtp.gmail.com';
-            $mail->SMTPAuth = true;
-            $mail->Username = 'suswinpalaniswamy@gmail.com';
-            $mail->Password = 'bogr nach ysxa yhfv';
-            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-            $mail->Port = 587;
+        $msg = "This is the OTP: " . $otp;
 
-            $mail->setFrom('suswinpalaniswamy@gmail.com','Suswin');
-            $mail->addAddress($email);
+        $header = "From: suswinpalaniswamy@gmail.com";
 
-            $mail->isHTML(true);
-            $mail->Subject = 'Verification - reg.';
-            $mail->Body = '<p>Your OTP: <strong>' . $otp . '</strong></p>';
-            $mail->AltBody = 'Your OTP: ' . $otp;;
-
-            $mail->send();
-
+        if (mail($email, $subject, $msg, $header) ) {
+            $response["success"] = "OTP sent successfully. \nCheck your mail.";
+            echo json_encode( $response );
             $_SESSION['email'] = $email;
             $_SESSION['otp'] = $otp;
             $_SESSION['otp_valid_time'] = time() + 300;
-
-            $response["success"] = "OTP sent successfully. \nCheck your mail.";
+            exit();
+        } else {
+            $response['error'] = "Mail not sent. Try again.";
             echo json_encode( $response );
-        } catch (Exception $e) {
-            $response['error'] = "Message could not be sent. Error: ". $e->getMessage() ."Please try again!";
-            echo json_encode( $response );
-        }
+            exit();
+        }        
     }
 }
 
+ob_end_flush();
 ?>
