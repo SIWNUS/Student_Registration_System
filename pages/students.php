@@ -2,6 +2,7 @@
 include("../includes/header.php");
 
 if (!isset($_SESSION['logged_in']) || !isset($_SESSION['email'])) {
+    echo '<script>alert("You should login as Admin to view this page!")</script>';
     header("Location: login.php");
     exit();
 }
