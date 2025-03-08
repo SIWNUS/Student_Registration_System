@@ -72,7 +72,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_SESSION['email']) && isset($
             exit();
         }
 
-        $upload_dir = __DIR__ . '/../uploads/';
+        $upload_dir = getenv('RAILWAY_VOLUME_MOUNT_PATH') ?: (__DIR__ . '/app/uploads/');
+
         if (!file_exists($upload_dir)) {
             mkdir($upload_dir, 0777, true);
         }
