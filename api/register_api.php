@@ -86,6 +86,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_SESSION['email']) && isset($
             mkdir($upload_dir, 0777, true);
         }
 
+        $upload_dir = '/tmp/uploads/';
+        if (!file_exists($upload_dir)) {
+            mkdir($upload_dir, 0777, true);
+        }
+
         $new_filename = uniqid() . "." . $ext;
         if (move_uploaded_file($_FILES["myfile"]["tmp_name"], $upload_dir . $new_filename)) {
             $profile_pic = $new_filename;
