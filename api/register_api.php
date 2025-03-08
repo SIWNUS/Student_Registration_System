@@ -72,22 +72,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_SESSION['email']) && isset($
             exit();
         }
 
-        $upload_dir = getenv('RAILWAY_VOLUME_MOUNT_PATH') ?: (__DIR__ . '/app/uploads/');
+        $upload_dir = getenv('RAILWAY_VOLUME_MOUNT_PATH') ?: (__DIR__ . '/../uploads/');
+
 
         if (!file_exists($upload_dir)) {
             mkdir($upload_dir, 0777, true);
         }
 
         $new_filename = uniqid() . "." . $ext;
-        var_dump($upload_dir);
-        var_dump(is_writable($upload_dir));
-        var_dump($_FILES['myfile']['tmp_name']);
+        // var_dump($upload_dir);
+        // var_dump(is_writable($upload_dir));
+        // var_dump($_FILES['myfile']['tmp_name']);
 
         if (move_uploaded_file($_FILES["myfile"]["tmp_name"], $upload_dir . $new_filename)) {
             $profile_pic = $new_filename;
         } else {
             $response["error"] = "There was a problem uploading your file. Please try again.";
-            // ob_clean();
+            ob_clean();
             echo json_encode($response);
             exit();
         }
