@@ -1,5 +1,6 @@
 <?php
 ob_start();
+session_start();
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     include("../config/db.php");
     
@@ -34,33 +35,34 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 include("../includes/header.php");
 ?>
 
+<div>
+    <h2>Login</h2>
+    <form action="login.php" method="post">
+        <div class="col-25">
+            <label for="email">E-Mail ID </label>
+        </div>
+        <div class="col-75">
+            <input type="email" id="email" name="email" placeholder="Enter student's mail id here...">
+        </div>
+        <br><br>
+        <div class="col-25">
+            <label for="pass">Password </label>
+        </div>
+        <div class="col-75">
+            <input type="password" id="pass" name="pass" placeholder="Set up your password here...">
+        </div>
+        <br><br>
+        <div class="submit-btn">
+            <input type="submit" value="submit">
+        </div>
+    </form>
+</div>
+<br><br>
+<div>
+    <p id="redirect">If you are not registered already, then <a href="../pages/register.php">register</a> here. </p>
+</div>
 
-    <div>
-        <h2>Login</h2>
-        <form action="login.php" method="post">
-            <div class="col-25">
-                <label for="email">E-Mail ID </label>
-            </div>
-            <div class="col-75">
-                <input type="email" id="email" name="email" placeholder="Enter student's mail id here...">
-            </div>
-            <br><br>
-            <div class="col-25">
-                <label for="pass">Password </label>
-            </div>
-            <div class="col-75">
-                <input type="password" id="pass" name="pass" placeholder="Set up your password here...">
-            </div>
-            <br><br>
-            <div class="submit-btn">
-                <input type="submit" value="submit">
-            </div>
-        </form>
-    </div>
-    <br><br>
-    <div>
-        <p id="redirect">If you are not registered already, then <a href="../pages/register.php">register</a> here. </p>
-    </div>
-
-<?php include("../includes/footer.php");
-ob_end_flush(); ?>
+<?php
+include("../includes/footer.php");
+ob_end_flush();
+?>
