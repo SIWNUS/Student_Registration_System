@@ -108,7 +108,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_SESSION['email'])) {
 
     if ($stmt->execute()) {
         $response["success"] = "Registered successfully";
-        session_unset();
     } else {
         $response["error"] = "Database error: " . $stmt->error;
     }
