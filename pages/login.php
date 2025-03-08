@@ -1,40 +1,41 @@
-<?php 
+<?php
+ob_start();
+session_start();
 
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        include("../config/db.php");
-      
-        $email = filter_var(trim($_POST['email']), FILTER_SANITIZE_EMAIL);
-        $password = $_POST['pass'];
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    include("../config/db.php");
+    
+    $email = filter_var(trim($_POST['email']), FILTER_SANITIZE_EMAIL);
+    $password = $_POST['pass'];
 
-        if ($email == '') {
-            echo "<script>alert('Fill all the fields');</script>";
-        } else {
-            $sql = "SELECT id, email, password FROM students WHERE email = ?;";
-            $stmt = $conn->prepare($sql);
-            $stmt->bind_param("s", $email);
+    if ($email == '') {
+        echo "<script>alert('Fill all the fields');</script>";
+    } else {
+        $sql = "SELECT id, email, password FROM students WHERE email = ?;";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("s", $email);
     
-            $stmt->execute();
-            $result = $stmt->get_result();
+        $stmt->execute();
+        $result = $stmt->get_result();
     
-            if ($row = $result->fetch_assoc()) {
-                if (password_verify($password, $row["password"])) {
-                    $_SESSION['logged_in'] = true;
-                    $_SESSION['email'] = $row['email'];
-                    header("Location: dashboard.php");
-                    exit();
-                } else {
-                    echo "<script>alert('Wrong Password');</script>";
-                }
+        if ($row = $result->fetch_assoc()) {
+            if (password_verify($password, $row["password"])) {
+                $_SESSION['logged_in'] = true;
+                $_SESSION['email'] = $row['email'];
+                header("Location: dashboard.php");
+                exit();
             } else {
-                echo "<script>alert('No records found');</script>";
+                echo "<script>alert('Wrong Password');</script>";
             }
-        }     
+        } else {
+            echo "<script>alert('No records found');</script>";
+        }
     }
+}
+
+include("../includes/header.php");
 ?>
 
-<?php 
-include("../includes/header.php") 
-?>
 
     <div>
         <h2>Login</h2>
@@ -63,4 +64,5 @@ include("../includes/header.php")
         <p id="redirect">If you are not registered already, then <a href="../pages/register.php">register</a> here. </p>
     </div>
 
-<?php include("../includes/footer.php") ?>
+<?php include("../includes/footer.php");
+ob_end_flush(); ?>
