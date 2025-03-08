@@ -1,9 +1,19 @@
 <?php
+
+ob_start();
+
 session_start();
 header('Content-Type: application/json');
 
 include("../config/db.php");
-include("age_finder.php");
+
+function age($bday) {
+    $dob = new DateTime($bday);
+    $today = new DateTime();
+
+    $age = $dob->diff($today)->y;
+    return (string)$age;
+}
 
 $response = [];
 
@@ -17,6 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_SESSION['email']) && isset($
 
     if (empty($name) || empty($dob) || empty($gender)) {
         $response['error'] = 'Fill in all the details';
+        ob_clean();
         echo json_encode($response);
         exit();
     }
@@ -37,12 +48,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_SESSION['email']) && isset($
         
         if (!array_key_exists($ext, $accepted)) {
             $response['error'] = 'Unaccepted file format!';
+            ob_clean();
             echo json_encode($response);
             exit();
         }
 
         if (!in_array(strtolower($filetype), $accepted)) {
             $response['error'] = 'Unaccepted file type!';
+            ob_clean();
             echo json_encode($response);
             exit();
         }
@@ -50,6 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_SESSION['email']) && isset($
         $maxsize = 5 * 1024 * 1024;
         if ($filesize > $maxsize) {
             $response['error'] = 'File too big!';
+            ob_clean();
             echo json_encode($response);
             exit();
         }
@@ -64,11 +78,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_SESSION['email']) && isset($
             $profile_pic = $new_filename;
         } else {
             $response["error"] = "There was a problem uploading your file. Please try again.";
+            ob_clean();
             echo json_encode($response);
             exit();
         }
     } else {
         $response["error"] = "You have to set your profile pic";
+        ob_clean();
         echo json_encode($response);
         exit();
     }
@@ -87,14 +103,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_SESSION['email']) && isset($
             $response["error"] = "Database error: " . $stmt->error;
         }
 
+        ob_clean();
         echo json_encode($response);
         $stmt->close();
     } else {
         $response["error"] = "Database error: " . $conn->error;
+        ob_clean();
         echo json_encode($response);
     }
 } else {
     $response["error"] = "Invalid request or session expired.";
+    ob_clean();
     echo json_encode($response);
 }
+ob_end_flush();
 ?>

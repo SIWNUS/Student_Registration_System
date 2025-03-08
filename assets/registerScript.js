@@ -19,5 +19,5 @@ document.getElementById('detailsForm').addEventListener('submit', function(event
     .catch(error => {
         console.error('ERROR: ', error);
         alert(error)
-    })
-})
+    });
+});
