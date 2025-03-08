@@ -80,6 +80,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_SESSION['email']) && isset($
         }
 
         $new_filename = uniqid() . "." . $ext;
+        var_dump(getenv('RAILWAY_RUN_UID'));
+        var_dump(getenv('RAILWAY_VOLUME_MOUNT_PATH'));
+
         var_dump($upload_dir);
         var_dump(is_writable($upload_dir));
         var_dump($_FILES['myfile']['tmp_name']);
