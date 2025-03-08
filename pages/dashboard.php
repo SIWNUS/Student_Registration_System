@@ -30,7 +30,7 @@ include("../config/db.php");
 <div>
     <h2>Welcome to your dashoboard!</h2>
     <div class="col-25">
-        <img src="/app/tmp/uploads/<?php echo $profile_pic; ?>" alt="Profile Picture">
+        <img src="/uploads/<?php echo $profile_pic; ?>" alt="Profile Picture">
         <br>
     </div>
     <div class="col-75">
