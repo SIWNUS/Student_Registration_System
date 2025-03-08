@@ -22,4 +22,5 @@ include("../includes/header.php");
     </form>
 </div>
 
+<script src="../assets/validateOtpScript.js">
 <?php include("../includes/footer.php"); ?>

@@ -47,4 +47,5 @@ include("../config/db.php");
     </table>
 </div>
 
+<script src="../assets/deleteScript.js"></script>
 <?php include("../includes/footer.php"); ?>

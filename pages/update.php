@@ -74,4 +74,5 @@ include("../config/db.php");
     </form>
 </div>
 
+<script src="../assets/updateScript.js"></script>
 <?php include("../includes/footer.php"); ?>

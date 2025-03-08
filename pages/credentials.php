@@ -29,4 +29,5 @@ include("../includes/header.php");
     </form>
 </div>
 
+<script src="../assets/credentialScript.js"></script>
 <?php include("../includes/footer.php"); ?>
