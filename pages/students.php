@@ -34,7 +34,7 @@ include("../config/db.php");
         <tbody>
             <?php while ($row = $result->fetch_assoc()) { ?>
                 <tr>
-                    <td><img src="../uploads/<?php echo htmlspecialchars($row['profile_pic']); ?>" class="profile-pic" alt="Profile"></td>
+                    <td><img src="/app/tmp/uploads/<?php echo htmlspecialchars($row['profile_pic']); ?>" class="profile-pic" alt="Profile"></td>
                     <td><?php echo htmlspecialchars($row['name']); ?></td>
                     <td id="mail_delete"><?php echo htmlspecialchars($row['email']); ?></td>
                     <td><?php echo htmlspecialchars($row['dob']); ?></td>
