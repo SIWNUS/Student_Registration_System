@@ -1,6 +1,6 @@
 <?php
 
-ob_start(); // Start output buffering
+ob_start();
 
 session_start();
 
@@ -28,12 +28,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (empty($email)) {
         $response['error'] = 'Fill in all the details';
+        ob_clean();
         echo json_encode($response);
         exit();
     }
 
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $response["error"] = 'Invalid email format';
+        ob_clean();
         echo json_encode( $response );
         exit;
     } else {
@@ -46,6 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->store_result(); // Needed to get num_rows
             if ($stmt->num_rows > 0) {
                 $response["exist_error"] = "This email is already registered.";
+                ob_clean();
                 echo json_encode($response);
                 $stmt->close();
                 exit();
@@ -53,6 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->close();
         } else {
             $response["error"] = "Database error: " . $conn->error;
+            ob_clean();
             echo json_encode($response);
             exit();
         }
@@ -86,9 +90,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['otp_valid_time'] = time() + 300;
 
             $response["success"] = "OTP sent successfully. \nCheck your mail.";
+            ob_clean();
             echo json_encode( $response );
         } catch (Exception $e) {
             $response['error'] = "Message could not be sent. Error: ". $e->getMessage() ."Please try again!";
+            ob_clean();
             echo json_encode( $response );
         }        
     }
