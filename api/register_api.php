@@ -72,15 +72,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_SESSION['email']) && isset($
             exit();
         }
 
+        echo shell_exec("ls -ld /app/uploads");
+
         $upload_dir = getenv('RAILWAY_VOLUME_MOUNT_PATH') ?: (__DIR__ . '/../uploads/');
 
         if (substr($upload_dir, -1) !== '/') {
             $upload_dir .= '/';
         }
 
+        if (!chmod($upload_dir, 0777)) {
+            error_log("Failed to change permissions for $upload_dir");
+        }
+
         if (!file_exists($upload_dir)) {
             mkdir($upload_dir, 0777, true);
         }
+
+        $upload_dir = '/tmp/uploads/';
+        if (!file_exists($upload_dir)) {
+            mkdir($upload_dir, 0777, true);
+        }
+        var_dump($upload_dir);
+        var_dump(is_writable($upload_dir));
 
         $new_filename = uniqid() . "." . $ext;
         var_dump(getenv('RAILWAY_RUN_UID'));
