@@ -7,6 +7,10 @@ header('Content-Type: application/json');
 
 include("../config/db.php");
 
+ini_set('upload_max_filesize', '5M');
+ini_set('post_max_size', '6M');
+
+
 function age($bday) {
     $dob = new DateTime($bday);
     $today = new DateTime();
