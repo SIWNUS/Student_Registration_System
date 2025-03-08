@@ -4,7 +4,7 @@ include("../includes/header.php");
 
 <div>
     <h2>Student Registration</h2>
-    <form action="" method="post" id="detailsForm">
+    <form action="" method="post" id="detailsForm" enctype="multipart/form-data">
         <div class="col-25">
             <label for="name">Student Name</label>
         </div>

@@ -23,7 +23,7 @@ include("../config/db.php");
 
 <div>
     <h2>Student Details Update Form</h2>
-    <form action="" method="post" id="updateForm">
+    <form action="" method="post" id="updateForm" enctype="multipart/form-data">
         <div class="col-25">
             <label for="name">Student Name</label>
         </div>
