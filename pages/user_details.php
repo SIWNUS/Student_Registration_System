@@ -49,5 +49,4 @@ include("../includes/header.php");
     </form>
 </div>
 
-<script src="../assets/registerScript.js"></script>
 <?php include("../includes/footer.php"); ?>

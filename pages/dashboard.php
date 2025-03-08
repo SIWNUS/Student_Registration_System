@@ -29,10 +29,10 @@ include("../config/db.php");
 
 <div>
     <h2>Welcome to your dashoboard!</h2>
-    <!-- <div class="col-25">
+    <div class="col-25">
         <img src="/uploads/<?php echo $profile_pic; ?>" alt="Profile Picture">
         <br>
-    </div> -->
+    </div>
     <div class="col-75">
         <div class="col-25">
             <p>Name</p>
