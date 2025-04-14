@@ -30,11 +30,12 @@ include("../config/db.php");
 <div>
     <h2>Welcome to your dashoboard!</h2>
     <div class="col-25">
-        <img src="<?php $profile_pic; ?>" alt="Profile picture">
+        <img src="<?php echo $profile_pic; ?>" alt="Profile picture">
         <br>
     </div>
     <div class="col-75">
         <div class="col-25">
+            <p><?php echo $profile_pic; ?></p>
             <p>Name</p>
         </div>
         <div class="col-75">
