@@ -1,33 +1,40 @@
 <?php
 
 ob_start();
-
 session_start();
 header('Content-Type: application/json');
 
 include("../config/db.php");
 
-ini_set('upload_max_filesize', '5M');
-ini_set('post_max_size', '6M');
+require '../vendor/autoload.php';
 
+use Cloudinary\Configuration\Configuration;
+use Cloudinary\Api\Upload\UploadApi;
+
+Configuration::instance([
+    'cloud' => [
+        'cloud_name' => 'dtfkwnn8w',
+        'api_key'    => '236292654365697',
+        'api_secret' => 'Dmntux07BhmEvgM1EoaeU8V-x_Q'
+    ],
+    'url' => ['secure' => true]
+]);
 
 function age($bday) {
     $dob = new DateTime($bday);
     $today = new DateTime();
-
-    $age = $dob->diff($today)->y;
-    return (string)$age;
+    return (string) $dob->diff($today)->y;
 }
 
 $response = [];
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_SESSION['email']) && isset($_SESSION['password'])) {
 
-    $name    = htmlspecialchars($_POST['name'], ENT_QUOTES, 'UTF-8');
-    $email   = $_SESSION['email'];
-    $password= $_SESSION['password'];
-    $dob     = $_POST['dob'];
-    $gender  = $_POST['gender'];
+    $name     = htmlspecialchars($_POST['name'], ENT_QUOTES, 'UTF-8');
+    $email    = $_SESSION['email'];
+    $password = $_SESSION['password'];
+    $dob      = $_POST['dob'];
+    $gender   = $_POST['gender'];
 
     if (empty($name) || empty($dob) || empty($gender)) {
         $response['error'] = 'Fill in all the details';
@@ -37,69 +44,42 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_SESSION['email']) && isset($
     }
 
     $age = age($dob);
-
     $profile_pic = "";
 
     if (isset($_FILES['myfile']) && $_FILES['myfile']['error'] == 0) {
 
         $accepted = ['jpg' => 'image/jpeg', 'jpeg' => 'image/jpeg', 'png' => 'image/png'];
-
         $filename = $_FILES['myfile']['name'];
         $filetype = $_FILES['myfile']['type'];
         $filesize = $_FILES['myfile']['size'];
+        $ext      = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
 
-        $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
-        
-        if (!array_key_exists($ext, $accepted)) {
-            $response['error'] = 'Unaccepted file format!';
+        if (!array_key_exists($ext, $accepted) || !in_array(strtolower($filetype), $accepted)) {
+            $response['error'] = 'Unaccepted file format or type!';
             ob_clean();
             echo json_encode($response);
             exit();
         }
 
-        if (!in_array(strtolower($filetype), $accepted)) {
-            $response['error'] = 'Unaccepted file type!';
-            ob_clean();
-            echo json_encode($response);
-            exit();
-        }
-
-        $maxsize = 5 * 1024 * 1024;
-        if ($filesize > $maxsize) {
+        if ($filesize > (5 * 1024 * 1024)) {
             $response['error'] = 'File too big!';
             ob_clean();
             echo json_encode($response);
             exit();
         }
 
-        $upload_dir = getenv('RAILWAY_VOLUME_MOUNT_PATH') ?: (__DIR__ . '/../uploads/');
-
-        if (substr($upload_dir, -1) !== '/') {
-            $upload_dir .= '/';
-        }
-
-        if (!chmod($upload_dir, 0777)) {
-            error_log("Failed to change permissions for $upload_dir");
-        }
-
-        if (!file_exists($upload_dir)) {
-            mkdir($upload_dir, 0777, true);
-        }
-
-        $upload_dir = '/tmp/uploads/';
-        if (!file_exists($upload_dir)) {
-            mkdir($upload_dir, 0777, true);
-        }
-
-        $new_filename = uniqid() . "." . $ext;
-        if (move_uploaded_file($_FILES["myfile"]["tmp_name"], $upload_dir . $new_filename)) {
-            $profile_pic = $new_filename;
-        } else {
-            $response["error"] = "There was a problem uploading your file. Please try again.";
+        try {
+            $uploadResult = (new UploadApi())->upload($_FILES['myfile']['tmp_name'], [
+                'folder' => 'students_profiles'
+            ]);
+            $profile_pic = $uploadResult['secure_url'];
+        } catch (Exception $e) {
+            $response["error"] = "Cloudinary upload failed: " . $e->getMessage();
             ob_clean();
             echo json_encode($response);
             exit();
         }
+
     } else {
         $response["error"] = "You have to set your profile pic";
         ob_clean();
@@ -111,16 +91,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_SESSION['email']) && isset($
     $stmt = $conn->prepare($sql);
 
     if ($stmt) {
-
         $stmt->bind_param("sssssss", $name, $email, $password, $dob, $age, $gender, $profile_pic);
-
         if ($stmt->execute()) {
             $response["success"] = "Registered successfully";
             session_unset();
         } else {
             $response["error"] = "Database error: " . $stmt->error;
         }
-
         ob_clean();
         echo json_encode($response);
         $stmt->close();
@@ -134,5 +111,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_SESSION['email']) && isset($
     ob_clean();
     echo json_encode($response);
 }
+
 ob_end_flush();
 ?>
