@@ -35,7 +35,6 @@ include("../config/db.php");
     </div>
     <div class="col-75">
         <div class="col-25">
-            <p><?php echo $profile_pic; ?></p>
             <p>Name</p>
         </div>
         <div class="col-75">
