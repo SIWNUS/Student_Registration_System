@@ -4,52 +4,82 @@ include("../includes/header.php");
 if (!isset($_SESSION["logged_in"])) {
     echo "<script>alert('You are not logged in! Redirecting to home page!');</script>";
     echo "<script>window.location.assign('../index.php');</script>";
-    exit();
 }
 
 include("../config/db.php");
-
-$email = $_SESSION['email'];
-$sql = "SELECT name, email, dob, age, gender, profile_pic FROM students WHERE email = ?";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("s", $email);
-$stmt->execute();
-$result = $stmt->get_result();
-$row = $result->fetch_assoc();
-
-$name = htmlspecialchars($row["name"]);
-$email = htmlspecialchars($row["email"]);
-$dob = htmlspecialchars($row["dob"]);
-$age = htmlspecialchars($row["age"]);
-$gender = htmlspecialchars($row["gender"]);
-$profile_pic = htmlspecialchars($row["profile_pic"]);
-
-// Check if profile_pic is not empty and construct the Cloudinary URL
-$cloudinary_url = $profile_pic ? "https://res.cloudinary.com/YOUR_CLOUD_NAME/image/upload/$profile_pic" : "/assets/default_profile.png"; // default fallback image
-
-$stmt->close();
 ?>
 
-<div class="dashboard-container">
-    <h2>Welcome to your Dashboard!</h2>
+<?php 
+    $email = $_SESSION['email'];
+    $sql = "SELECT name, email, dob, age, gender, profile_pic FROM students WHERE email = ?;";
+    $stmt = $conn -> prepare($sql);
+    $stmt -> bind_param("s", $email);
+    $stmt -> execute();
+    $result = $stmt -> get_result();
+    $row = $result -> fetch_assoc();
+    $name = $row["name"];
+    $email = $row["email"];
+    $dob = $row['dob'];
+    $gender = $row['gender'];
+    $age = $row['age'];
+    $profile_pic = $row['profile_pic'];
 
-    <div class="profile-section">
-        <img src="<?php echo $cloudinary_url; ?>" alt="Profile Picture" width="150" height="150" style="border-radius: 50%; object-fit: cover;">
+    $stmt -> close();
+?>
+
+<div>
+    <h2>Welcome to your dashoboard!</h2>
+    <div class="col-25">
+        <img src="<?php $profile_pic; ?>" alt="Profile picture">
+        <br>
     </div>
-
-    <div class="info-section">
-        <p><strong>Name:</strong> <?php echo $name; ?></p>
-        <p><strong>Email:</strong> <?php echo $email; ?></p>
-        <p><strong>Date of Birth:</strong> <?php echo $dob; ?></p>
-        <p><strong>Age:</strong> <?php echo $age; ?></p>
-        <p><strong>Gender:</strong> <?php echo $gender; ?></p>
+    <div class="col-75">
+        <div class="col-25">
+            <p>Name</p>
+        </div>
+        <div class="col-75">
+            <p><?php echo $name; ?></p>
+        </div>
     </div>
-
-    <div class="update-btn">
-        <a href="../pages/update.php">
-            <button type="button">Update</button>
-        </a>
+    <div class="col-75">
+        <div class="col-25">
+            <p>Email: </p>
+        </div>
+        <div class="col-75">
+            <p><?php echo $email; ?></p>
+        </div>
+    </div>
+    <div class="col-75">
+    <div class="col-25">
+            <p>Date of Birth: </p>
+        </div>
+        <div class="col-75">
+            <p><?php echo $dob; ?></p>
+        </div>
+    </div>
+    <div class="col-75">
+    <div class="col-25">
+            <p>Age: </p>
+        </div>
+        <div class="col-75">
+            <p><?php echo $age; ?></p>
+        </div>
+    </div>
+    <div class="col-75">
+    <div class="col-25">
+            <p>Gender: </p>
+        </div>
+        <div class="col-75">
+            <p><?php echo $gender; ?></p>
+        </div>
     </div>
 </div>
+
+<div>
+    <div>
+        <a href="../pages/update.php"><button>Update</button></a>
+    </div>
+</div>
+
 
 <?php include("../includes/footer.php") ?>
